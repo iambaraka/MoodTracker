@@ -20,10 +20,9 @@ export const MoodPicker: FunctionComponent = () => {
       <Text style={styles.heading}>How are you right now?</Text>
       <View style={styles.moodList}>
         {moodOptions.map((option) => (
-          <View>
+          <View key={option.emoji}>
             <Pressable
               onPress={() => setSelectedMood(option)}
-              key={option.emoji}
               style={[
                 styles.moodItem,
                 option.emoji === selectedMood?.emoji
