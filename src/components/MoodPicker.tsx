@@ -1,8 +1,10 @@
 import { FunctionComponent, useCallback, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { MoodOptionType } from '../types';
 import { theme } from '../theme';
+
+const imageSrc = require('../../assets/butterflies.png');
 
 const moodOptions: MoodOptionType[] = [
   { emoji: '🧑‍💻', description: 'studious' },
@@ -20,13 +22,32 @@ export const MoodPicker: FunctionComponent<MoodPickerProps> = ({
   handleSelectMood,
 }) => {
   const [selectedMood, setSelectedMood] = useState<MoodOptionType>();
+  const [hasSelectedMood, setHasSelectedMood] = useState(false);
 
   const handleSelect = useCallback(() => {
     if (selectedMood) {
       handleSelectMood(selectedMood);
       setSelectedMood(undefined);
+      setHasSelectedMood(true);
     }
   }, [selectedMood, handleSelectMood]);
+
+  if (hasSelectedMood) {
+    return (
+      <View style={styles.container}>
+        <Image source={imageSrc} style={styles.img} />
+
+        <Pressable
+          style={styles.button}
+          onPress={() => {
+            setHasSelectedMood(false);
+          }}
+        >
+          <Text style={styles.buttonText}>Choose Another</Text>
+        </Pressable>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -112,5 +133,8 @@ const styles = StyleSheet.create({
     color: theme.colorWhite,
     textAlign: 'center',
     fontWeight: 'bold',
+  },
+  img: {
+    alignSelf: 'center',
   },
 });
