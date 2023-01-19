@@ -4,7 +4,7 @@ import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { MoodOptionType } from '../types';
 import { theme } from '../theme';
 
-const imageSrc = require('../../assets/butterflies.png');
+const imageSrc = require('../../assets/images/butterflies.png');
 
 const moodOptions: MoodOptionType[] = [
   { emoji: '🧑‍💻', description: 'studious' },
