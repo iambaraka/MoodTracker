@@ -1,18 +1,13 @@
+import { AppProvider } from './providers/App.provider';
 import { BottomTabsNavigator } from './screens/BottomTabs.navigation';
 import { NavigationContainer } from '@react-navigation/native';
-import { StyleSheet } from 'react-native';
 
 export const App = () => {
   return (
-    <NavigationContainer>
-      <BottomTabsNavigator />
-    </NavigationContainer>
+    <AppProvider>
+      <NavigationContainer>
+        <BottomTabsNavigator />
+      </NavigationContainer>
+    </AppProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'teal',
-  },
-});
