@@ -40,12 +40,16 @@ type AppContextType = {
   greeting: string;
   moodList: MoodOptionWithTimestamp[];
   handleSelectMood: (mood: MoodOptionType) => void;
+  handleDeleteMood: (mood: MoodOptionWithTimestamp) => void;
 };
 const AppContext = createContext<AppContextType>({
   greeting: 'Hello',
   moodList: [],
   handleSelectMood: () => {
     throw new Error('handleSelectMood not implemented');
+  },
+  handleDeleteMood: () => {
+    throw new Error('handleDeleteMood not implemented');
   },
 });
 
@@ -57,15 +61,25 @@ export const AppProvider: FunctionComponent<PropsWithChildren<{}>> = ({
   const handleSelectMood = useCallback((mood: MoodOptionType) => {
     setMoodList((prevMoodList) => {
       const newMoodList = [
-        ...prevMoodList,
         {
           mood,
           timestamp: Date.now(),
         },
+        ...prevMoodList,
       ];
 
       setAppData({ moodList: newMoodList });
 
+      return newMoodList;
+    });
+  }, []);
+
+  const handleDeleteMood = useCallback((mood: MoodOptionWithTimestamp) => {
+    setMoodList((prevMoodList) => {
+      const newMoodList = prevMoodList.filter(
+        (item) => item.timestamp !== mood.timestamp
+      );
+      setAppData({ moodList: newMoodList });
       return newMoodList;
     });
   }, []);
@@ -85,6 +99,7 @@ export const AppProvider: FunctionComponent<PropsWithChildren<{}>> = ({
         greeting: 'Hello',
         moodList,
         handleSelectMood,
+        handleDeleteMood,
       }}
     >
       {children}
