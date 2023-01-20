@@ -12,6 +12,17 @@ import { format } from 'date-fns';
 import { theme } from '../theme';
 import { useAppContext } from '../providers/App.provider';
 
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+
+import Reanimated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  runOnJS,
+} from 'react-native-reanimated';
+
+const ReanimatedView = Reanimated.createAnimatedComponent(View);
+
 type MoodItemRowProps = {
   item: MoodOptionWithTimestamp;
 };
@@ -24,19 +35,62 @@ export const MoodItemRow: FunctionComponent<MoodItemRowProps> = ({ item }) => {
     handleDeleteMood(item);
   }, [handleDeleteMood, item]);
 
+  const END_POSITION = 100;
+  const onLeft = useSharedValue(true);
+  const position = useSharedValue(0);
+
+  const deleteWithDelay = useCallback(() => {
+    setTimeout(() => {
+      handleDelete();
+    }, 500);
+  }, [handleDelete]);
+
+  const panGestureEvent = Gesture.Pan()
+    .onUpdate((e) => {
+      if (onLeft.value) {
+        position.value = e.translationX;
+      } else {
+        position.value = END_POSITION + e.translationX;
+      }
+    })
+    .onEnd((e) => {
+      // if (position.value > END_POSITION / 2) {
+      //   position.value = withTiming(END_POSITION, { duration: 100 });
+      //   onLeft.value = false;
+      // } else {
+      //   position.value = withTiming(0, { duration: 100 });
+      //   onLeft.value = true;
+      // }
+
+      if (Math.abs(position.value) > END_POSITION) {
+        position.value = withTiming(1000 * Math.sign(position.value));
+        onLeft.value = false;
+        runOnJS(deleteWithDelay)();
+      } else {
+        position.value = withTiming(0, { duration: 100 });
+        onLeft.value = true;
+      }
+    });
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: position.value }],
+  }));
+
   return (
-    <View style={styles.moodItem}>
-      <View style={styles.iconAndDescription}>
-        <Text style={styles.moodValue}>{item.mood.emoji}</Text>
-        <Text style={styles.moodDescription}>{item.mood.description}</Text>
-      </View>
-      <Text style={styles.moodDate}>
-        {format(new Date(item.timestamp), "dd MMM, yyyy 'at' h:mmaaa")}
-      </Text>
-      <Pressable onPress={handleDelete}>
-        <Text style={styles.deleteText}>Delete</Text>
-      </Pressable>
-    </View>
+    <GestureDetector gesture={panGestureEvent}>
+      <ReanimatedView style={[styles.moodItem, animatedStyle]}>
+        <View style={styles.iconAndDescription}>
+          <Text style={styles.moodValue}>{item.mood.emoji}</Text>
+          <Text style={styles.moodDescription}>{item.mood.description}</Text>
+        </View>
+        <Text style={styles.moodDate}>
+          {format(new Date(item.timestamp), "dd MMM, yyyy 'at' h:mmaaa")}
+        </Text>
+        <Pressable onPress={handleDelete}>
+          <Text style={styles.deleteText}>Delete</Text>
+        </Pressable>
+      </ReanimatedView>
+    </GestureDetector>
   );
 };
 
