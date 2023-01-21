@@ -1,9 +1,8 @@
 import { FunctionComponent, useCallback, useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
-
 import Reanimated, {
-  withTiming,
   useAnimatedStyle,
+  withTiming,
 } from 'react-native-reanimated';
 
 import { MoodOptionType } from '../types';
