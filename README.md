@@ -25,8 +25,6 @@
 5. `yarn ios` to build and run distributable code on an IOS device or simulator
 
 
-### Contribution guidelines
-- Feel free to clone, contribute and use this code in whichever way you please
 
 ### Who do I talk to?
 - You can reach me via Email  [barakamulumia@gmail.com](mailto:barakamulumia@gmail.com)
