@@ -9,7 +9,8 @@
 
 
 ### App preview
-![mood-tracker](https://user-images.githubusercontent.com/65751779/214059572-6c912c0b-b719-47c5-a4bb-6ad67c351a76.png)
+![mood-tracker](https://user-images.githubusercontent.com/65751779/214215443-9254a548-ec3f-4137-a718-3c7cf0a82441.png)
+
 
 
 
